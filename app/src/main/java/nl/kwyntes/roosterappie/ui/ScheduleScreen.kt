@@ -7,14 +7,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import nl.kwyntes.roosterappie.lib.AHScheduleService
@@ -40,7 +40,12 @@ fun ScheduleScreen(navController: NavController, ahScheduleService: AHScheduleSe
         topBar = {
             TopAppBar(
                 backgroundColor = MaterialTheme.colors.primary,
-                title = { Text(monthYear.format()) }
+                title = { Text(monthYear.format()) },
+                actions = {
+                    IconButton(onClick = { navController.navigate("settings") }) {
+                        Icon(Icons.Filled.Settings, contentDescription = "Instellingen")
+                    }
+                }
             )
         }
     ) { contentPadding ->

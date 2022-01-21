@@ -25,6 +25,7 @@ import nl.kwyntes.roosterappie.lib.AHScheduleService
 import nl.kwyntes.roosterappie.lib.AuthData
 import nl.kwyntes.roosterappie.ui.LoginScreen
 import nl.kwyntes.roosterappie.ui.ScheduleScreen
+import nl.kwyntes.roosterappie.ui.SettingsScreen
 import nl.kwyntes.roosterappie.ui.theme.RoosterAppieTheme
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
@@ -61,6 +62,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable("login") { LoginScreen(navController, ahScheduleService) }
                         composable("schedule") { ScheduleScreen(navController, ahScheduleService) }
+                        composable("settings") { SettingsScreen(navController, ahScheduleService) }
                     }
                 }
             }
