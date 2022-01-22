@@ -2,8 +2,8 @@
 
 package nl.kwyntes.roosterappie.lib
 
-import android.util.Log
 import it.skrape.core.htmlDocument
+import it.skrape.selects.ElementNotFoundException
 import okhttp3.*
 import java.io.IOException
 import java.time.LocalDate
@@ -15,8 +15,6 @@ const val TIMESHEET_URL = "https://sam.ahold.com/wrkbrn_jct/etm/time/timesheet/e
 const val LOGIN_URL = "https://sam.ahold.com/pkmslogin.form"
 
 data class AuthData(val pnl: String?, val password: String?, val loginCookie: String? = null)
-
-data class Shift(val date: LocalDate, val start: LocalTime, val end: LocalTime)
 
 class IncorrectCredentialsException : Exception()
 
@@ -35,7 +33,6 @@ class AHScheduleService {
         loginCookie = authData.loginCookie ?: loginCookie
     }
 
-    // TODO: Add settings screen with button to call this method AND clear the data in dataStore!
     fun logout() {
         pnl = null
         password = null
@@ -52,6 +49,8 @@ class AHScheduleService {
         return suspendCoroutine { continuation ->
             client.newCall(req).enqueue(object : Callback {
                 override fun onResponse(call: Call, response: Response) {
+                    response.body?.close()
+
                     // We might want to handle a situation where the cookie header is missing,
                     // but I don't think that will ever happen.
                     // And I probably shouldn't think that.
@@ -83,6 +82,8 @@ class AHScheduleService {
         return suspendCoroutine { continuation ->
             client.newCall(req).enqueue(object : Callback {
                 override fun onResponse(call: Call, response: Response) {
+                    response.body?.close()
+
                     // Handle incorrect credentials
                     if (response.code != 302) {
                         continuation.resumeWith(Result.failure(IncorrectCredentialsException()))
@@ -112,9 +113,9 @@ class AHScheduleService {
         }
     }
 
-    suspend fun getSchedule(): List<Shift> {
+    suspend fun getSchedule(monthYear: MonthYear): List<Shift> {
         val req = Request.Builder()
-            .url(TIMESHEET_URL)
+            .url(TIMESHEET_URL + "?NEW_MONTH_YEAR=${monthYear.month}/${monthYear.year}")
             .header("Cookie", loginCookie!!)
             // When the login cookie is expired, ask for a JSON response. Otherwise this header is ignored.
             .header("Accept", "application/json")
@@ -134,32 +135,39 @@ class AHScheduleService {
             })
         }
 
-        Log.d("RESBODY", body)
-
         // Response when login cookie has expired
         if (body == "{\n    \"operation\" : \"login\"\n}\n") {
             performLogin()
-            return getSchedule()
+            return getSchedule(monthYear)
         }
 
-        val shifts = htmlDocument(body) {
-            findAll("td[class*=calendarCellRegular]:not(.calendarCellRegularCurrent:has(.calCellData)) table") {
-                map {
-                    val dateString = it.attribute("title")
-                        .replace("Details van ", "")
+        try {
+            return htmlDocument(body) {
+                // Black magic
+                findAll("td[class*=calendarCellRegular]:not(.calendarCellRegularCurrent:has(.calCellData)) table") {
+                    map {
+                        val dateString = it.attribute("title")
+                            .replace("Details van ", "")
 
-                    Shift(
-                        date = LocalDate.parse(
-                            dateString,
-                            DateTimeFormatter.ofPattern("MM/dd/yyyy")
-                        ),
-                        start = LocalTime.parse(it.findFirst("span span").text),
-                        end = LocalTime.parse(it.findSecond("span span").text)
-                    )
+                        Shift(
+                            date = LocalDate.parse(
+                                dateString,
+                                DateTimeFormatter.ofPattern("MM/dd/yyyy")
+                            ),
+                            start = LocalTime.parse(it.findFirst("span span").text),
+                            end = LocalTime.parse(it.findSecond("span span").text),
+                            authorisedStatus = when {
+                                it.text.contains("niet-geautoriseerd") -> AuthorisedStatus.NotAuthorised
+                                it.text.contains("geautoriseerd") -> AuthorisedStatus.Authorised
+                                else -> AuthorisedStatus.None
+                            }
+                        )
+                    }
                 }
             }
+        } catch (e: ElementNotFoundException) {
+            // Apparantly there's no nice way of doing things
+            return listOf()
         }
-
-        return shifts
     }
 }

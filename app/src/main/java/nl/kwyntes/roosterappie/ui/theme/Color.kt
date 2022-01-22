@@ -7,4 +7,5 @@ val Purple500 = Color(0xFF6200EE)
 val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)
 
-val Blue = Color.Blue
+val LightBlue = Color(96, 199, 255, 160)
+val LightGreen = Color(96, 255, 122, 160)
