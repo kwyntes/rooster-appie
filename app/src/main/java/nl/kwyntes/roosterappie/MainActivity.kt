@@ -39,6 +39,7 @@ import nl.kwyntes.roosterappie.lib.AHScheduleService
 import nl.kwyntes.roosterappie.lib.AuthData
 import nl.kwyntes.roosterappie.lib.MonthYear
 import nl.kwyntes.roosterappie.lib.checkUpdates
+import nl.kwyntes.roosterappie.ui.CalculatorScreen
 import nl.kwyntes.roosterappie.ui.LoginScreen
 import nl.kwyntes.roosterappie.ui.ScheduleScreen
 import nl.kwyntes.roosterappie.ui.SettingsScreen
@@ -126,6 +127,18 @@ class MainActivity : ComponentActivity() {
                             arguments = listOf(navArgument("lastMonthYear") { type = NavType.StringType })
                         ) {
                             SettingsScreen(
+                                navController,
+                                ahScheduleService,
+                                lastMonthYear = MonthYear.fromString(
+                                    it.arguments?.getString("lastMonthYear")!!
+                                )
+                            )
+                        }
+                        composable(
+                            "calculator?lastMonthYear={lastMonthYear}",
+                            arguments = listOf(navArgument("lastMonthYear") { type = NavType.StringType })
+                        ) {
+                            CalculatorScreen(
                                 navController,
                                 ahScheduleService,
                                 lastMonthYear = MonthYear.fromString(

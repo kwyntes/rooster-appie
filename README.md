@@ -13,4 +13,5 @@ Een sterretje ervoor betekent dat er aan wordt gewerkt!
     - [x] Geautoriseerd & niet-geautoriseerd statussen
     - [x] Highlight huidige dag
 - [x] (Semi-)Automatische updates via GitHub Releases
+- [ ] * Gewerkte uren tussen twee data berekenen
 - [ ] Notificaties voor roosterwijzigingen (app runt op achtergrond)

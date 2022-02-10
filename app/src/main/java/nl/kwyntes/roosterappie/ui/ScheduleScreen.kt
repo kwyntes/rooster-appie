@@ -1,21 +1,26 @@
 package nl.kwyntes.roosterappie.ui
 
+import android.app.DatePickerDialog
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.coroutineScope
 import nl.kwyntes.roosterappie.lib.AHScheduleService
 import nl.kwyntes.roosterappie.lib.AuthorisedStatus
 import nl.kwyntes.roosterappie.lib.MonthYear
@@ -23,10 +28,14 @@ import nl.kwyntes.roosterappie.lib.Shift
 import nl.kwyntes.roosterappie.ui.theme.LightBlue
 import nl.kwyntes.roosterappie.ui.theme.LightGreen
 import java.time.LocalDate
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 @ExperimentalPagerApi
 @Composable
 fun ScheduleScreen(navController: NavController, ahScheduleService: AHScheduleService, initialMonthYear: MonthYear?) {
+    val context = LocalContext.current
+
     val pagerState = rememberPagerState(initialPage = 1)
 
     var monthYear by remember { mutableStateOf(initialMonthYear ?: MonthYear.now()) }
@@ -80,6 +89,10 @@ fun ScheduleScreen(navController: NavController, ahScheduleService: AHScheduleSe
                         )
                     },
                     actions = {
+//                        IconButton(onClick = { navController.navigate("calculator?lastMonthYear=${monthYear}") }) {
+//                            Icon(Icons.Filled.Calculate, contentDescription = "Rekenmachine")
+//                        }
+
                         IconButton(onClick = { navController.navigate("settings?lastMonthYear=${monthYear}") }) {
                             Icon(Icons.Filled.Settings, contentDescription = "Instellingen")
                         }
@@ -126,4 +139,23 @@ fun ScheduleScreen(navController: NavController, ahScheduleService: AHScheduleSe
             }
         }
     }
+}
+
+suspend fun calculateWorkedHours(context: Context, ahScheduleService: AHScheduleService): Float {
+    val now = LocalDate.now()
+
+    val pickedDate: LocalDate = suspendCoroutine { continuation ->
+        DatePickerDialog(
+            context,
+            { _, year, month, dayOfMonth ->
+                continuation.resume(LocalDate.of(year, month, dayOfMonth))
+            },
+            now.year, now.monthValue, now.dayOfMonth
+        ).run {
+            datePicker.maxDate = now.toEpochDay()
+            show()
+        }
+    }
+
+    return ahScheduleService.calculateAuthorisedHoursSince(pickedDate)
 }

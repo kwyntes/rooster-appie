@@ -170,4 +170,8 @@ class AHScheduleService {
             return listOf()
         }
     }
+
+    suspend fun calculateAuthorisedHoursSince(date: LocalDate): Float {
+        TODO("Implement this")
+    }
 }
