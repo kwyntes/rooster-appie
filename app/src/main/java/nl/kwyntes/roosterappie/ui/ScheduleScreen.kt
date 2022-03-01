@@ -2,6 +2,7 @@ package nl.kwyntes.roosterappie.ui
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,17 +17,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.datastore.preferences.core.edit
 import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.coroutineScope
+import nl.kwyntes.roosterappie.PREF_LOGIN_COOKIE
+import nl.kwyntes.roosterappie.PREF_PASSWORD
+import nl.kwyntes.roosterappie.PREF_PNL
+import nl.kwyntes.roosterappie.dataStore
 import nl.kwyntes.roosterappie.lib.AHScheduleService
 import nl.kwyntes.roosterappie.lib.AuthorisedStatus
 import nl.kwyntes.roosterappie.lib.MonthYear
 import nl.kwyntes.roosterappie.lib.Shift
 import nl.kwyntes.roosterappie.ui.theme.LightBlue
 import nl.kwyntes.roosterappie.ui.theme.LightGreen
+import org.apache.http.auth.InvalidCredentialsException
 import java.time.LocalDate
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -36,6 +43,20 @@ import kotlin.coroutines.suspendCoroutine
 fun ScheduleScreen(navController: NavController, ahScheduleService: AHScheduleService, initialMonthYear: MonthYear?) {
     val context = LocalContext.current
 
+    suspend fun logout() {
+        context.dataStore.edit {
+            it.remove(PREF_PNL)
+            it.remove(PREF_PASSWORD)
+            it.remove(PREF_LOGIN_COOKIE)
+        }
+        ahScheduleService.logout()
+
+        navController.backQueue.clear()
+        navController.navigate("login")
+
+        Toast.makeText(context, "Daar ging iets mis! (wachwoord gewijzigd?)", Toast.LENGTH_SHORT).show()
+    }
+
     val pagerState = rememberPagerState(initialPage = 1)
 
     var monthYear by remember { mutableStateOf(initialMonthYear ?: MonthYear.now()) }
@@ -44,9 +65,13 @@ fun ScheduleScreen(navController: NavController, ahScheduleService: AHScheduleSe
     var nextShifts: List<Shift> by remember { mutableStateOf(listOf()) }
 
     LaunchedEffect(Unit) {
-        prevShifts = ahScheduleService.getSchedule(monthYear.previous())
-        currShifts = ahScheduleService.getSchedule(monthYear)
-        nextShifts = ahScheduleService.getSchedule(monthYear.next())
+        try {
+            prevShifts = ahScheduleService.getSchedule(monthYear.previous())
+            currShifts = ahScheduleService.getSchedule(monthYear)
+            nextShifts = ahScheduleService.getSchedule(monthYear.next())
+        } catch (e: InvalidCredentialsException) {
+            logout()
+        }
     }
 
     LaunchedEffect(pagerState.currentPage) {
@@ -59,7 +84,11 @@ fun ScheduleScreen(navController: NavController, ahScheduleService: AHScheduleSe
 
             nextShifts = currShifts
             currShifts = prevShifts
-            prevShifts = ahScheduleService.getSchedule(monthYear.previous())
+            try {
+                prevShifts = ahScheduleService.getSchedule(monthYear.previous())
+            } catch (e: InvalidCredentialsException) {
+                logout()
+            }
         } else if (pagerState.currentPage == 2) {
             // When swiping right (going forward)
             // This has to be at the top to prevent weird update glitches
@@ -69,7 +98,11 @@ fun ScheduleScreen(navController: NavController, ahScheduleService: AHScheduleSe
 
             prevShifts = currShifts
             currShifts = nextShifts
-            nextShifts = ahScheduleService.getSchedule(monthYear.next())
+            try {
+                nextShifts = ahScheduleService.getSchedule(monthYear.next())
+            } catch (e: InvalidCredentialsException) {
+                logout()
+            }
         }
     }
 

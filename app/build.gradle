@@ -12,7 +12,7 @@ android {
         targetSdk 31
         versionCode 1
         // Remeber to update this!!!
-        versionName "1.0.0"
+        versionName "1.0.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

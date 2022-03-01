@@ -55,6 +55,7 @@ fun SettingsScreen(navController: NavController, ahScheduleService: AHScheduleSe
                             }
                             ahScheduleService.logout()
 
+                            navController.backQueue.clear()
                             navController.navigate("login")
                         }
                     }

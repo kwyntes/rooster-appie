@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavType
@@ -35,10 +36,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
-import nl.kwyntes.roosterappie.lib.AHScheduleService
-import nl.kwyntes.roosterappie.lib.AuthData
-import nl.kwyntes.roosterappie.lib.MonthYear
-import nl.kwyntes.roosterappie.lib.checkUpdates
+import nl.kwyntes.roosterappie.lib.*
 import nl.kwyntes.roosterappie.ui.CalculatorScreen
 import nl.kwyntes.roosterappie.ui.LoginScreen
 import nl.kwyntes.roosterappie.ui.ScheduleScreen
@@ -69,7 +67,16 @@ class MainActivity : ComponentActivity() {
                 )
             }.first()
             ahScheduleService.importAuthData(prefAuthData)
-            ahScheduleService.tryPerformLoginIfNeeded()
+
+            try {
+                ahScheduleService.tryPerformLoginIfNeeded()
+            } catch (e: IncorrectCredentialsException) {
+                applicationContext.dataStore.edit {
+                    it.remove(PREF_PNL)
+                    it.remove(PREF_PASSWORD)
+                    it.remove(PREF_LOGIN_COOKIE)
+                }
+            }
         }
 
         setContent {
