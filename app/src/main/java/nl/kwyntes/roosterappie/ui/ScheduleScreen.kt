@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -22,18 +21,13 @@ import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import kotlinx.coroutines.coroutineScope
 import nl.kwyntes.roosterappie.PREF_LOGIN_COOKIE
 import nl.kwyntes.roosterappie.PREF_PASSWORD
 import nl.kwyntes.roosterappie.PREF_PNL
 import nl.kwyntes.roosterappie.dataStore
-import nl.kwyntes.roosterappie.lib.AHScheduleService
-import nl.kwyntes.roosterappie.lib.AuthorisedStatus
-import nl.kwyntes.roosterappie.lib.MonthYear
-import nl.kwyntes.roosterappie.lib.Shift
+import nl.kwyntes.roosterappie.lib.*
 import nl.kwyntes.roosterappie.ui.theme.LightBlue
 import nl.kwyntes.roosterappie.ui.theme.LightGreen
-import org.apache.http.auth.InvalidCredentialsException
 import java.time.LocalDate
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -69,7 +63,7 @@ fun ScheduleScreen(navController: NavController, ahScheduleService: AHScheduleSe
             prevShifts = ahScheduleService.getSchedule(monthYear.previous())
             currShifts = ahScheduleService.getSchedule(monthYear)
             nextShifts = ahScheduleService.getSchedule(monthYear.next())
-        } catch (e: InvalidCredentialsException) {
+        } catch (e: IncorrectCredentialsException) {
             logout()
         }
     }
@@ -86,7 +80,7 @@ fun ScheduleScreen(navController: NavController, ahScheduleService: AHScheduleSe
             currShifts = prevShifts
             try {
                 prevShifts = ahScheduleService.getSchedule(monthYear.previous())
-            } catch (e: InvalidCredentialsException) {
+            } catch (e: IncorrectCredentialsException) {
                 logout()
             }
         } else if (pagerState.currentPage == 2) {
@@ -100,7 +94,7 @@ fun ScheduleScreen(navController: NavController, ahScheduleService: AHScheduleSe
             currShifts = nextShifts
             try {
                 nextShifts = ahScheduleService.getSchedule(monthYear.next())
-            } catch (e: InvalidCredentialsException) {
+            } catch (e: IncorrectCredentialsException) {
                 logout()
             }
         }

@@ -72,11 +72,13 @@ class AHScheduleService {
         val req = Request.Builder()
             .url(LOGIN_URL)
             .header("Cookie", sessionCookie)
-            .post(FormBody.Builder()
-                .add("username", pnl!!)
-                .add("password", password!!)
-                .add("login-form-type", "pwd")
-                .build())
+            .post(
+                FormBody.Builder()
+                    .add("username", pnl!!)
+                    .add("password", password!!)
+                    .add("login-form-type", "pwd")
+                    .build()
+            )
             .build()
 
         return suspendCoroutine { continuation ->
