@@ -141,18 +141,20 @@ class MainActivity : ComponentActivity() {
                                 )
                             )
                         }
-                        composable(
-                            "calculator?lastMonthYear={lastMonthYear}",
-                            arguments = listOf(navArgument("lastMonthYear") { type = NavType.StringType })
-                        ) {
-                            CalculatorScreen(
-                                navController,
-                                ahScheduleService,
-                                lastMonthYear = MonthYear.fromString(
-                                    it.arguments?.getString("lastMonthYear")!!
-                                )
-                            )
-                        }
+
+                        // -- Not yet finished --
+//                        composable(
+//                            "calculator?lastMonthYear={lastMonthYear}",
+//                            arguments = listOf(navArgument("lastMonthYear") { type = NavType.StringType })
+//                        ) {
+//                            CalculatorScreen(
+//                                navController,
+//                                ahScheduleService,
+//                                lastMonthYear = MonthYear.fromString(
+//                                    it.arguments?.getString("lastMonthYear")!!
+//                                )
+//                            )
+//                        }
                     }
                 }
             }

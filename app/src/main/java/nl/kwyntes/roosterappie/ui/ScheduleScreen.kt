@@ -116,6 +116,7 @@ fun ScheduleScreen(navController: NavController, ahScheduleService: AHScheduleSe
                         )
                     },
                     actions = {
+                        // -- Not yet finished --
 //                        IconButton(onClick = { navController.navigate("calculator?lastMonthYear=${monthYear}") }) {
 //                            Icon(Icons.Filled.Calculate, contentDescription = "Rekenmachine")
 //                        }
@@ -152,7 +153,7 @@ fun ScheduleScreen(navController: NavController, ahScheduleService: AHScheduleSe
                             Row {
                                 Text(shift.formatTimeFrame() + " ")
                                 Text(
-                                    when(shift.authorisedStatus) {
+                                    when (shift.authorisedStatus) {
                                         AuthorisedStatus.None -> ""
                                         AuthorisedStatus.Authorised -> "(geautoriseerd)"
                                         AuthorisedStatus.NotAuthorised -> "(niet-geautoriseerd)"

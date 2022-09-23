@@ -64,12 +64,12 @@ fun LoginScreen(navController: NavController, ahScheduleService: AHScheduleServi
 
             onClick = {
                 coroutineScope.launch {
-                    ahScheduleService.importAuthData(AuthData(pnl, password))
+                    ahScheduleService.importAuthData(AuthData(pnl.trim(), password))
                     try {
                         val loginCookie = ahScheduleService.performLogin()
 
                         context.dataStore.edit { settings ->
-                            settings[PREF_PNL] = pnl
+                            settings[PREF_PNL] = pnl.trim()
                             settings[PREF_PASSWORD] = password
                             settings[PREF_LOGIN_COOKIE] = loginCookie
                         }

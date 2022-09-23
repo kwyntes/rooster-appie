@@ -1,3 +1,8 @@
+/**
+ * This code is not used yet (it's also not finished).
+ * I might integrate this into the app later.
+ */
+
 package nl.kwyntes.roosterappie.ui
 
 import androidx.compose.foundation.layout.Column
