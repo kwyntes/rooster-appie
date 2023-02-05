@@ -1,6 +1,6 @@
 > ### UPDATE: *Ik werk niet meer bij Appie en uit puur egoisme heb ik daarom besloten deze app niet langer te onderhouden.*
 
-Voel je vrij dit te forken though, als je dat jezelf aan wilt doen. *[Hou je wel aan de licentie](LICENSE)*.
+Voel je vrij dit te forken though, als je dat jezelf aan wilt doen. *[Hou je wel aan de licentie!](LICENSE)*
 
 # Rooster Appie
 
