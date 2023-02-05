@@ -1,5 +1,7 @@
 > ### UPDATE: *Ik werk niet meer bij Appie en uit puur egoisme heb ik daarom besloten deze app niet langer te onderhouden.*
 
+Voel je vrij dit te forken though, als je dat jezelf aan wilt doen.
+
 # Rooster Appie
 
 Een Android-app waarmee je makkelijk & snel je rooster bij de Albert Heijn kunt bekijken (onder andere).
