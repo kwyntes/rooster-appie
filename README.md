@@ -1,4 +1,4 @@
-> ### UPDATE: Ik werk niet meer bij Appie en uit puur egoisme heb ik daarom besloten deze app niet langer te onderhouden.
+> ### UPDATE: *Ik werk niet meer bij Appie en uit puur egoisme heb ik daarom besloten deze app niet langer te onderhouden.
 
 # Rooster Appie
 
