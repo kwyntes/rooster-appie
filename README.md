@@ -1,3 +1,5 @@
+## UPDATE: Ik werk niet meer bij Appie en uit puur egoisme heb ik daarom besloten deze app niet langer te onderhouden.
+
 # Rooster Appie
 
 Een Android-app waarmee je makkelijk & snel je rooster bij de Albert Heijn kunt bekijken (onder andere).
@@ -10,7 +12,7 @@ Een Android-app waarmee je makkelijk & snel je rooster bij de Albert Heijn kunt 
     - [x] Highlight huidige dag
 - [x] (Semi-)Automatische updates via GitHub Releases
 
-#### Wordt aan gewerkt
+~~#### Wordt aan gewerkt
 
 Niets want daar ben ik veels te lui voor.
 
@@ -24,4 +26,4 @@ Niets want daar ben ik veels te lui voor.
 #### Mogelijke features die ik misschien ooit nog ga toevoegen omdat ze opzich wel een soort van nuttig zouden kunnen zijn
 
 - [ ] Gewerkte uren tussen twee data berekenen
-- [ ] Notificaties voor roosterwijzigingen (app runt op achtergrond)
+- [ ] Notificaties voor roosterwijzigingen (app runt op achtergrond)~~
