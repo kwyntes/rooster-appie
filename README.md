@@ -14,16 +14,16 @@ Een Android-app waarmee je makkelijk & snel je rooster bij de Albert Heijn kunt 
 
 ~~#### Wordt aan gewerkt
 
-Niets want daar ben ik veels te lui voor.
+~~Niets want daar ben ik veels te lui voor.
 
-#### Geplande features
+~~#### Geplande features
 
-- [ ] **v2**: Complete rewrite om Material Design 3 te implementeren en nettere code te hebben
-- [ ] Shifts ruilen
-  - [ ] Notificaties als iemand een shift met je wilt ruilen (via server, 
+~~- [ ] **v2**: Complete rewrite om Material Design 3 te implementeren en nettere code te hebben
+~~- [ ] Shifts ruilen
+  ~~- [ ] Notificaties als iemand een shift met je wilt ruilen (via server, 
   andere persoon heeft ook Rooster Appie nodig)
 
-#### Mogelijke features die ik misschien ooit nog ga toevoegen omdat ze opzich wel een soort van nuttig zouden kunnen zijn
+~~#### Mogelijke features die ik misschien ooit nog ga toevoegen omdat ze opzich wel een soort van nuttig zouden kunnen zijn
 
-- [ ] Gewerkte uren tussen twee data berekenen
-- [ ] Notificaties voor roosterwijzigingen (app runt op achtergrond)~~
+~~- [ ] Gewerkte uren tussen twee data berekenen
+~- [ ] Notificaties voor roosterwijzigingen (app runt op achtergrond)
